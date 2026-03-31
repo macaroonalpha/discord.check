@@ -102,15 +102,42 @@
       fake.style.display = 'none';
       stage.style.display = 'flex';
 
+<script>
+  const btn = document.getElementById('enterBtn');
+  const stage = document.getElementById('stage');
+  const fake = document.getElementById('fake');
+  const audio = document.getElementById('audio');
+  const gif = document.getElementById('gif');
+
+  let soundInterval;
+
+  function restartGif() {
+    const src = gif.src;
+    gif.src = '';
+    gif.offsetHeight;
+    gif.src = src;
+  }
+
+  btn.addEventListener('click', async () => {
+    fake.style.display = 'none';
+    stage.style.display = 'flex';
+
+    restartGif();
+
+    audio.loop = false;
+    audio.pause();
+    audio.currentTime = 0;
+
+    await audio.play(); // 첫 클릭 즉시 1회 재생
+
+    soundInterval = setInterval(() => {
+      audio.pause();
+      audio.currentTime = 0;
+      audio.play();
       restartGif();
-
-      audio.loop = false;
-
-      setInterval(() => {
-        audio.pause();
-        audio.currentTime = 0;
-        audio.play();
-      }, 4200);
+    }, 4200);
+  });
+</script>
 
       setInterval(restartGif, 5000); // GIF 반복 느낌 강화
     });
