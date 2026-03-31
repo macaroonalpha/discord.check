@@ -102,14 +102,14 @@
       fake.style.display = 'none';
       stage.style.display = 'flex';
 
-<script>
+<script><script>
   const btn = document.getElementById('enterBtn');
   const stage = document.getElementById('stage');
   const fake = document.getElementById('fake');
   const audio = document.getElementById('audio');
   const gif = document.getElementById('gif');
 
-  let soundInterval;
+  let soundInterval = null;
 
   function restartGif() {
     const src = gif.src;
@@ -128,7 +128,13 @@
     audio.pause();
     audio.currentTime = 0;
 
-    await audio.play(); // 첫 클릭 즉시 1회 재생
+    if (soundInterval) clearInterval(soundInterval);
+
+    try {
+      await audio.play(); // 첫 클릭 즉시 재생
+    } catch (e) {
+      console.error('첫 재생 실패', e);
+    }
 
     soundInterval = setInterval(() => {
       audio.pause();
