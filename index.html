@@ -3,183 +3,114 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kyoka Suigetsu</title>
+  <title>Discord</title>
   <style>
     * { box-sizing: border-box; }
-    html, body {
-      margin: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      background: #000;
-      font-family: "Pretendard", "Apple SD Gothic Neo", sans-serif;
-    }
-
     body {
+      margin: 0;
+      height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      background:
-        radial-gradient(circle at center, rgba(91, 109, 255, 0.18), transparent 25%),
-        linear-gradient(180deg, #03040a 0%, #000 100%);
+      background: #313338;
+      font-family: "gg sans", "Noto Sans KR", sans-serif;
+      color: #fff;
+    }
+
+    .container {
+      text-align: center;
+      background: #2b2d31;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      width: 320px;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+      font-size: 22px;
+    }
+
+    p {
+      font-size: 14px;
+      color: #b5bac1;
+      margin-bottom: 20px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: #5865f2;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    button:hover {
+      background: #4752c4;
     }
 
     .stage {
       position: fixed;
       inset: 0;
-      display: flex;
+      background: black;
+      display: none;
       align-items: center;
       justify-content: center;
-      overflow: hidden;
-      background: #000;
+      z-index: 10;
     }
 
     .stage img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      filter: contrast(1.05) saturate(1.05);
-    }
-
-    .flash {
-      position: fixed;
-      inset: 0;
-      background: radial-gradient(circle, rgba(255,255,255,0.95) 0%, rgba(173, 191, 255, 0.72) 25%, rgba(79, 94, 255, 0.15) 45%, rgba(0,0,0,0) 70%);
-      opacity: 0;
-      pointer-events: none;
-      z-index: 4;
-    }
-
-    .flash.active {
-      animation: flashEffect 1.15s ease;
-    }
-
-    @keyframes flashEffect {
-      0% { opacity: 0; }
-      15% { opacity: 1; }
-      45% { opacity: 0.6; }
-      100% { opacity: 0; }
-    }
-
-    .slash {
-      position: fixed;
-      left: 6%;
-      right: 6%;
-      top: 50%;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, rgba(167, 180, 255, 0.3), rgba(255,255,255,0.96), rgba(167, 180, 255, 0.3), transparent);
-      opacity: 0;
-      transform: translateY(-50%) scaleX(0.2);
-      filter: blur(0.4px);
-      pointer-events: none;
-      z-index: 5;
-    }
-
-    .slash.active {
-      animation: slashEffect 1s ease;
-    }
-
-    @keyframes slashEffect {
-      0% { opacity: 0; transform: translateY(-50%) scaleX(0.15); }
-      20% { opacity: 1; transform: translateY(-50%) scaleX(1); }
-      70% { opacity: 0.5; transform: translateY(-50%) scaleX(1.08); }
-      100% { opacity: 0; transform: translateY(-50%) scaleX(1.12); }
-    }
-
-    .fallback {
-      position: fixed;
-      inset: 0;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      background: rgba(0, 0, 0, 0.02);
-      z-index: 10;
-      color: #f4f7ff;
-      text-align: center;
-      padding: 24px;
-      cursor: pointer;
-    }
-
-    .fallback.show {
-      display: flex;
-    }
-
-    .fallback-card {
-      padding: 10px 14px;
-      border-radius: 999px;
-      background: rgba(0, 0, 0, 0.16);
-      border: 1px solid rgba(255,255,255,0.08);
-      backdrop-filter: blur(6px);
-      color: rgba(255,255,255,0.72);
-      font-size: 12px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
     }
   </style>
 </head>
 <body>
-  <main class="stage">
-    <img id="gif" src="kyoka.gif" alt="Kyoka Suigetsu GIF" />
-  </main>
 
-  <div class="flash" id="flash"></div>
-  <div class="slash" id="slash"></div>
-
-  <div class="fallback" id="fallback">
-    <div class="fallback-card">tap anywhere</div>
+  <div class="container" id="fake">
+    <h1>브라우저에서 Discord 열기</h1>
+    <p>보안을 위해 링크를 확인하세요</p>
+    <button id="enterBtn">확인하기</button>
   </div>
 
-  <audio id="audio" src="kyoka.mp3" preload="auto"></audio>
+  <div class="stage" id="stage">
+    <img id="gif" src="kyoka.gif" />
+  </div>
+
+  <audio id="audio" src="kyoka.mp3"></audio>
 
   <script>
-    const gif = document.getElementById('gif');
+    const btn = document.getElementById('enterBtn');
+    const stage = document.getElementById('stage');
+    const fake = document.getElementById('fake');
     const audio = document.getElementById('audio');
-    const flash = document.getElementById('flash');
-    const slash = document.getElementById('slash');
-    const fallback = document.getElementById('fallback');
-    
+    const gif = document.getElementById('gif');
+
     function restartGif() {
       const src = gif.src;
       gif.src = '';
-      requestAnimationFrame(() => {
-        gif.src = src;
-      });
+      gif.offsetHeight;
+      gif.src = src;
     }
 
-    function triggerEffects() {
-      flash.classList.remove('active');
-      slash.classList.remove('active');
-      void flash.offsetWidth;
-      void slash.offsetWidth;
-      flash.classList.add('active');
-      slash.classList.add('active');
+    btn.addEventListener('click', async () => {
+      fake.style.display = 'none';
+      stage.style.display = 'flex';
+
       restartGif();
-    }
 
-    async function playSequence() {
-      triggerEffects();
+      audio.loop = true;
       audio.currentTime = 0;
       await audio.play();
-    }
 
-    async function init() {
-      try {
-        await playSequence();
-      } catch (e) {
-        fallback.classList.add('show');
-      }
-    }
-
-    fallback.addEventListener('click', async () => {
-      fallback.classList.remove('show');
-      try {
-        await playSequence();
-      } catch (e) {
-        fallback.classList.add('show');
-      }
+      setInterval(restartGif, 5000); // GIF 반복 느낌 강화
     });
-
-    window.addEventListener('load', init);
   </script>
+
 </body>
 </html>
