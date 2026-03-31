@@ -104,9 +104,13 @@
 
       restartGif();
 
-      audio.loop = true;
-      audio.currentTime = 0;
-      await audio.play();
+      audio.loop = false;
+
+      setInterval(() => {
+        audio.pause();
+        audio.currentTime = 0;
+        audio.play();
+      }, 4200);
 
       setInterval(restartGif, 5000); // GIF 반복 느낌 강화
     });
